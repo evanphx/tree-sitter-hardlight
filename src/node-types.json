@@ -12,7 +12,15 @@
         "named": true
       },
       {
+        "type": "enum_definition",
+        "named": true
+      },
+      {
         "type": "function_definition",
+        "named": true
+      },
+      {
+        "type": "if_let_statement",
         "named": true
       },
       {
@@ -395,6 +403,16 @@
           },
           {
             "type": "pattern_list",
+            "named": true
+          }
+        ]
+      },
+      "let": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "let",
             "named": true
           }
         ]
@@ -1104,6 +1122,32 @@
     }
   },
   {
+    "type": "enum_definition",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "except_clause",
     "named": true,
     "fields": {},
@@ -1316,6 +1360,46 @@
       "types": [
         {
           "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "if_let_statement",
+    "named": true,
+    "fields": {
+      "alternative": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "elif_clause",
+            "named": true
+          },
+          {
+            "type": "else_clause",
+            "named": true
+          }
+        ]
+      },
+      "consequence": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "assignment",
           "named": true
         }
       ]
@@ -2393,6 +2477,10 @@
     "named": false
   },
   {
+    "type": "enum",
+    "named": false
+  },
+  {
     "type": "escape_sequence",
     "named": true
   },
@@ -2462,7 +2550,7 @@
   },
   {
     "type": "let",
-    "named": false
+    "named": true
   },
   {
     "type": "method",

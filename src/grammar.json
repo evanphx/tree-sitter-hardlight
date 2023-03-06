@@ -723,6 +723,10 @@
       "members": [
         {
           "type": "SYMBOL",
+          "name": "if_let_statement"
+        },
+        {
+          "type": "SYMBOL",
           "name": "if_statement"
         },
         {
@@ -744,6 +748,10 @@
         {
           "type": "SYMBOL",
           "name": "decorated_definition"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "enum_definition"
         }
       ]
     },
@@ -866,6 +874,54 @@
             "type": "SYMBOL",
             "name": "block"
           }
+        }
+      ]
+    },
+    "if_let_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "if"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "assignment"
+        },
+        {
+          "type": "FIELD",
+          "name": "consequence",
+          "content": {
+            "type": "SYMBOL",
+            "name": "block"
+          }
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "FIELD",
+            "name": "alternative",
+            "content": {
+              "type": "SYMBOL",
+              "name": "elif_clause"
+            }
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "alternative",
+              "content": {
+                "type": "SYMBOL",
+                "name": "else_clause"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },
@@ -1372,6 +1428,31 @@
                 "type": "BLANK"
               }
             ]
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "body",
+          "content": {
+            "type": "SYMBOL",
+            "name": "block"
+          }
+        }
+      ]
+    },
+    "enum_definition": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "enum"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
           }
         },
         {
@@ -2883,6 +2964,10 @@
         ]
       }
     },
+    "let": {
+      "type": "STRING",
+      "value": "let"
+    },
     "assignment": {
       "type": "SEQ",
       "members": [
@@ -2903,8 +2988,12 @@
           ]
         },
         {
-          "type": "STRING",
-          "value": "let"
+          "type": "FIELD",
+          "name": "let",
+          "content": {
+            "type": "SYMBOL",
+            "name": "let"
+          }
         },
         {
           "type": "FIELD",

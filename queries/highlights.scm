@@ -50,7 +50,6 @@
 
 (comment) @comment
 (string) @string
-(escape_sequence) @escape
 
 [
   "-"
@@ -111,5 +110,6 @@
   "return"
   "try"
   "while"
-  "let"
+  (let)
+  "enum"
 ] @keyword

@@ -212,12 +212,14 @@ module.exports = grammar({
     // Compound statements
 
     _compound_statement: $ => choice(
+      $.if_let_statement,
       $.if_statement,
       $.while_statement,
       $.try_statement,
       $.function_definition,
       $.class_definition,
       $.decorated_definition,
+      $.enum_definition,
     ),
 
     block: $ => seq(
@@ -243,6 +245,13 @@ module.exports = grammar({
     else_clause: $ => seq(
       'else',
       field('body', $.block)
+    ),
+
+    if_let_statement: $ => seq(
+      'if', $.assignment,
+      field('consequence', $.block),
+      repeat(field('alternative', $.elif_clause)),
+      optional(field('alternative', $.else_clause))
     ),
 
     while_statement: $ => seq(
@@ -350,6 +359,12 @@ module.exports = grammar({
       'class',
       field('name', $.identifier),
       field('superclasses', optional(seq(':', $.expression))),
+      field('body', $.block)
+    ),
+
+    enum_definition: $ => seq(
+      'enum',
+      field('name', $.identifier),
       field('body', $.block)
     ),
 
