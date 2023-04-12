@@ -12,7 +12,6 @@
 
   (parenthesized_expression)
 
-  (tuple)
   (list)
   (set)
 

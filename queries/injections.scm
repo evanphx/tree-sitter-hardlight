@@ -6,3 +6,5 @@
  (#lua-match? @regex "^r.*"))
 
 (comment) @comment
+
+(minus_metadata) @yaml

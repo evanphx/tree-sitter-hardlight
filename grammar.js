@@ -45,6 +45,8 @@ module.exports = grammar({
     [$.list, $.list_pattern],
     [$.named_expression, $.as_pattern],
     [$._simple_statements, $._simple_statements],
+    [$.expression_statement, $._collection_elements],
+    [$.primary_expression, $.concatenated_string],
   ],
 
   supertypes: $ => [
@@ -67,7 +69,14 @@ module.exports = grammar({
   word: $ => $.identifier,
 
   rules: {
-    module: $ => repeat($._statement),
+    module: $ => seq(
+      optional($.minus_metadata),
+      repeat($._statement),
+    ),
+
+    minus_metadata: $ => seq(
+      repeat(/.+\n/), "---\n",
+    ),
 
     _statement: $ => choice(
       $._simple_statements,
@@ -220,6 +229,7 @@ module.exports = grammar({
       $.class_definition,
       $.decorated_definition,
       $.enum_definition,
+      $.match_definition,
     ),
 
     block: $ => seq(
@@ -265,12 +275,7 @@ module.exports = grammar({
       field('body', $.block),
       choice(
         seq(
-          repeat1($.except_clause),
-          optional($.else_clause),
-          optional($.finally_clause)
-        ),
-        seq(
-          repeat1($.except_group_clause),
+          repeat1($.catch_clause),
           optional($.else_clause),
           optional($.finally_clause)
         ),
@@ -278,19 +283,15 @@ module.exports = grammar({
       )
     ),
 
-    except_clause: $ => seq(
-      'except',
-      $.block
-    ),
-
-   except_group_clause: $ => seq(
-      'except*',
-      seq(
-        $.expression,
-        optional(seq(
-          'as',
-          $.expression
-        ))
+    catch_clause: $ => seq(
+      'catch',
+      optional(
+        seq(
+          '(',
+          field('var', $.identifier),
+          optional(seq(':', field('type', $.type))),
+          ')',
+        )
       ),
       $.block
     ),
@@ -368,6 +369,18 @@ module.exports = grammar({
       field('body', $.block)
     ),
 
+    match_definition: $ => seq(
+      'match',
+      field('name', $.identifier),
+      field('body', seq('{', repeat($.when_statement), '}')),
+    ),
+
+    when_statement: $ => seq(
+      'when',
+      field('pattern', $.expression),
+      field('body', choice($.block, $.expression))
+    ),
+
     parenthesized_list_splat: $ => prec(PREC.parenthesized_list_splat, seq(
       '(',
       choice(
@@ -440,7 +453,7 @@ module.exports = grammar({
       $.default_parameter,
       $.typed_default_parameter,
       $.list_splat_pattern,
-      $.tuple_pattern,
+      //$.tuple_pattern,
       $.keyword_separator,
       $.positional_separator,
       $.dictionary_splat_pattern
@@ -533,7 +546,7 @@ module.exports = grammar({
       $.call,
       $.list,
       $.set,
-      $.tuple,
+      //$.tuple,
       $.parenthesized_expression,
       $.ellipsis
     ),
@@ -609,7 +622,7 @@ module.exports = grammar({
     lambda: $ => prec(PREC.lambda, seq(
       field('parameters', optional(choice($.parameters, $.identifier))),
       '=>',
-      field('body', choice(prec.left(2, $.block)), prec.left(1, $.expression))
+      field('body', choice($.block, $.expression))
     )),
 
     let: $ => 'let',
@@ -658,7 +671,8 @@ module.exports = grammar({
       $.expression_list,
       $.assignment,
       $.augmented_assignment,
-      $.yield
+      $.yield,
+      $._compound_statement
     ),
 
     yield: $ => prec.right(seq(
@@ -773,8 +787,8 @@ module.exports = grammar({
     )),
 
     concatenated_string: $ => seq(
-      $.string,
-      repeat1($.string)
+      prec.left($.string),
+      prec.right(repeat1($.string)),
     ),
 
     string: $ => seq(
@@ -892,7 +906,7 @@ module.exports = grammar({
       $.expression
     )),
 
-    comment: $ => token(seq('--', /.*/)),
+    comment: $ => token(seq('//', /.*/)),
 
     positional_separator: $ => '/',
     keyword_separator: $ => '*',

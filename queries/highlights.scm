@@ -48,7 +48,11 @@
   (float)
 ] @number
 
-(comment) @comment
+[
+ (comment)
+ (minus_metadata)
+] @comment
+
 (string) @string
 
 [
@@ -99,7 +103,7 @@
   "del"
   "elif"
   "else"
-  "except"
+  "catch"
   "exec"
   "finally"
   "from"
@@ -112,4 +116,6 @@
   "while"
   (let)
   "enum"
+  "match"
+  "when"
 ] @keyword

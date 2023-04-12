@@ -28,6 +28,10 @@
         "named": true
       },
       {
+        "type": "match_definition",
+        "named": true
+      },
+      {
         "type": "try_statement",
         "named": true
       },
@@ -170,10 +174,6 @@
         "named": true
       },
       {
-        "type": "tuple_pattern",
-        "named": true
-      },
-      {
         "type": "typed_default_parameter",
         "named": true
       },
@@ -279,10 +279,6 @@
       },
       {
         "type": "true",
-        "named": true
-      },
-      {
-        "type": "tuple",
         "named": true
       },
       {
@@ -421,6 +417,10 @@
         "multiple": false,
         "required": false,
         "types": [
+          {
+            "type": "_compound_statement",
+            "named": true
+          },
           {
             "type": "assignment",
             "named": true
@@ -571,6 +571,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "_compound_statement",
+            "named": true
+          },
           {
             "type": "assignment",
             "named": true
@@ -782,6 +786,42 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "catch_clause",
+    "named": true,
+    "fields": {
+      "type": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type",
+            "named": true
+          }
+        ]
+      },
+      "var": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1145,40 +1185,6 @@
           }
         ]
       }
-    }
-  },
-  {
-    "type": "except_clause",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "block",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "except_group_clause",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "block",
-          "named": true
-        },
-        {
-          "type": "expression",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -1556,6 +1562,10 @@
           {
             "type": "block",
             "named": true
+          },
+          {
+            "type": "expression",
+            "named": true
           }
         ]
       },
@@ -1656,6 +1666,45 @@
     }
   },
   {
+    "type": "match_definition",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "when_statement",
+            "named": true
+          },
+          {
+            "type": "{",
+            "named": false
+          },
+          {
+            "type": "}",
+            "named": false
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "minus_metadata",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "module",
     "named": true,
     "fields": {},
@@ -1669,6 +1718,10 @@
         },
         {
           "type": "_simple_statement",
+          "named": true
+        },
+        {
+          "type": "minus_metadata",
           "named": true
         }
       ]
@@ -2018,46 +2071,15 @@
       "required": true,
       "types": [
         {
+          "type": "catch_clause",
+          "named": true
+        },
+        {
           "type": "else_clause",
           "named": true
         },
         {
-          "type": "except_clause",
-          "named": true
-        },
-        {
-          "type": "except_group_clause",
-          "named": true
-        },
-        {
           "type": "finally_clause",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "tuple",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "expression",
-          "named": true
-        },
-        {
-          "type": "list_splat",
-          "named": true
-        },
-        {
-          "type": "parenthesized_list_splat",
-          "named": true
-        },
-        {
-          "type": "yield",
           "named": true
         }
       ]
@@ -2203,6 +2225,36 @@
     "fields": {}
   },
   {
+    "type": "when_statement",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          },
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      },
+      "pattern": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "while_statement",
     "named": true,
     "fields": {
@@ -2318,6 +2370,10 @@
   },
   {
     "type": "-",
+    "named": false
+  },
+  {
+    "type": "---\n",
     "named": false
   },
   {
@@ -2449,6 +2505,10 @@
     "named": false
   },
   {
+    "type": "catch",
+    "named": false
+  },
+  {
     "type": "class",
     "named": false
   },
@@ -2483,14 +2543,6 @@
   {
     "type": "escape_sequence",
     "named": true
-  },
-  {
-    "type": "except",
-    "named": false
-  },
-  {
-    "type": "except*",
-    "named": false
   },
   {
     "type": "exec",
@@ -2553,6 +2605,10 @@
     "named": true
   },
   {
+    "type": "match",
+    "named": false
+  },
+  {
     "type": "method",
     "named": false
   },
@@ -2607,6 +2663,10 @@
   {
     "type": "type_conversion",
     "named": true
+  },
+  {
+    "type": "when",
+    "named": false
   },
   {
     "type": "while",
