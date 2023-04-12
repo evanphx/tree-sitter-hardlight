@@ -74,8 +74,12 @@ module.exports = grammar({
       repeat($._statement),
     ),
 
+    frontmatter: $ => repeat1(/.+\n/),
+    frontmatter_sep: $ => "---\n",
+
     minus_metadata: $ => seq(
-      repeat(/.+\n/), "---\n",
+      optional($.frontmatter),
+      $.frontmatter_sep,
     ),
 
     _statement: $ => choice(

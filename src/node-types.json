@@ -1301,6 +1301,11 @@
     }
   },
   {
+    "type": "frontmatter",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "function_definition",
     "named": true,
     "fields": {
@@ -1702,7 +1707,21 @@
   {
     "type": "minus_metadata",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "frontmatter",
+          "named": true
+        },
+        {
+          "type": "frontmatter_sep",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "module",
@@ -2373,10 +2392,6 @@
     "named": false
   },
   {
-    "type": "---\n",
-    "named": false
-  },
-  {
     "type": "-=",
     "named": false
   },
@@ -2571,6 +2586,10 @@
   {
     "type": "from",
     "named": false
+  },
+  {
+    "type": "frontmatter_sep",
+    "named": true
   },
   {
     "type": "global",

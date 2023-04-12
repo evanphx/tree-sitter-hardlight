@@ -7,4 +7,4 @@
 
 (comment) @comment
 
-(minus_metadata) @yaml
+(frontmatter) @yaml

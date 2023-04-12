@@ -50,7 +50,8 @@
 
 [
  (comment)
- (minus_metadata)
+ (frontmatter)
+ (frontmatter_sep)
 ] @comment
 
 (string) @string
