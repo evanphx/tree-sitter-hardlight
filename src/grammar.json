@@ -26,13 +26,6 @@
         }
       ]
     },
-    "frontmatter": {
-      "type": "REPEAT1",
-      "content": {
-        "type": "PATTERN",
-        "value": ".+\\n"
-      }
-    },
     "frontmatter_sep": {
       "type": "STRING",
       "value": "---\n"
@@ -41,16 +34,8 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "frontmatter"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "frontmatter"
         },
         {
           "type": "SYMBOL",
@@ -4660,7 +4645,12 @@
     ]
   ],
   "precedences": [],
-  "externals": [],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "frontmatter"
+    }
+  ],
   "inline": [
     "_simple_statement",
     "_compound_statement",

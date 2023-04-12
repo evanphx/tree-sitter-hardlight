@@ -68,17 +68,20 @@ module.exports = grammar({
 
   word: $ => $.identifier,
 
+  externals: $ => [
+    $.frontmatter,
+  ],
+
   rules: {
     module: $ => seq(
       optional($.minus_metadata),
       repeat($._statement),
     ),
 
-    frontmatter: $ => repeat1(/.+\n/),
     frontmatter_sep: $ => "---\n",
 
     minus_metadata: $ => seq(
-      optional($.frontmatter),
+      $.frontmatter,
       $.frontmatter_sep,
     ),
 

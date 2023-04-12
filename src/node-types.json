@@ -1301,11 +1301,6 @@
     }
   },
   {
-    "type": "frontmatter",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "function_definition",
     "named": true,
     "fields": {
@@ -2586,6 +2581,10 @@
   {
     "type": "from",
     "named": false
+  },
+  {
+    "type": "frontmatter",
+    "named": true
   },
   {
     "type": "frontmatter_sep",
