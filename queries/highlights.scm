@@ -54,8 +54,9 @@
  (frontmatter_sep)
 ] @comment
 
+(escape_sequence) @string.escape
+
 (string) @string
-(single_string) @string
 
 [
   "-"

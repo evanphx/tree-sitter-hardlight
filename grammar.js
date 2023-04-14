@@ -70,6 +70,9 @@ module.exports = grammar({
 
   externals: $ => [
     $.frontmatter,
+    $._string_start,
+    $._string_content,
+    $._string_end,
   ],
 
   rules: {
@@ -541,7 +544,6 @@ module.exports = grammar({
       alias("match", $.identifier),
       $.keyword_identifier,
       $.string,
-      $.single_string,
       $.concatenated_string,
       $.integer,
       $.float,
@@ -800,24 +802,18 @@ module.exports = grammar({
     ),
 
     string: $ => seq(
-      '"',
+      field('prefix', alias($._string_start, '"')),
       repeat(choice(
-        $._interpreted_string_literal_basic_content,
-        $.escape_sequence
+        field('string_content', $.string_content)
       )),
-      '"',
+      field('suffix', alias($._string_end, '"'))
     ),
-    _interpreted_string_literal_basic_content: $ => token.immediate(prec(1, /[^"\n\\]+/)),
 
-    single_string: $ => seq(
-      '\'',
-      repeat(choice(
-        $._interpreted_single_string_literal_basic_content,
-        $.escape_sequence
-      )),
-      '\'',
-    ),
-    _interpreted_single_string_literal_basic_content: $ => token.immediate(prec(1, /[^'\n\\]+/)),
+    string_content: $ => prec.right(0, repeat1(
+      choice(
+        $.escape_sequence,
+        $._string_content
+      ))),
 
     interpolation: $ => seq(
       '{',
