@@ -270,6 +270,10 @@
         "named": true
       },
       {
+        "type": "single_string",
+        "named": true
+      },
+      {
         "type": "string",
         "named": true
       },
@@ -2006,6 +2010,21 @@
     }
   },
   {
+    "type": "single_string",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "escape_sequence",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "slice",
     "named": true,
     "fields": {},
@@ -2344,6 +2363,10 @@
   },
   {
     "type": "&=",
+    "named": false
+  },
+  {
+    "type": "'",
     "named": false
   },
   {

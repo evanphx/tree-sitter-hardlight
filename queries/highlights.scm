@@ -55,6 +55,7 @@
 ] @comment
 
 (string) @string
+(single_string) @string
 
 [
   "-"

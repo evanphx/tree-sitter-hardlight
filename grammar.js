@@ -541,6 +541,7 @@ module.exports = grammar({
       alias("match", $.identifier),
       $.keyword_identifier,
       $.string,
+      $.single_string,
       $.concatenated_string,
       $.integer,
       $.float,
@@ -807,6 +808,16 @@ module.exports = grammar({
       '"',
     ),
     _interpreted_string_literal_basic_content: $ => token.immediate(prec(1, /[^"\n\\]+/)),
+
+    single_string: $ => seq(
+      '\'',
+      repeat(choice(
+        $._interpreted_single_string_literal_basic_content,
+        $.escape_sequence
+      )),
+      '\'',
+    ),
+    _interpreted_single_string_literal_basic_content: $ => token.immediate(prec(1, /[^'\n\\]+/)),
 
     interpolation: $ => seq(
       '{',
