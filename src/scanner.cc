@@ -15,6 +15,7 @@ enum TokenType {
   STRING_START,
   STRING_CONTENT,
   STRING_END,
+  SCAN_ERROR,
 };
 
 struct Delimiter {
@@ -106,21 +107,11 @@ struct Scanner {
     }
     i += delimiter_count;
 
-    vector<uint16_t>::iterator
-      iter = indent_length_stack.begin() + 1,
-      end = indent_length_stack.end();
-
-    for (; iter != end && i < TREE_SITTER_SERIALIZATION_BUFFER_SIZE; ++iter) {
-      buffer[i++] = *iter;
-    }
-
     return i;
   }
 
   void deserialize(const char *buffer, unsigned length) {
     delimiter_stack.clear();
-    indent_length_stack.clear();
-    indent_length_stack.push_back(0);
 
     if (length > 0) {
       size_t i = 0;
@@ -131,10 +122,6 @@ struct Scanner {
         memcpy(delimiter_stack.data(), &buffer[i], delimiter_count);
       }
       i += delimiter_count;
-
-      for (; i < length; i++) {
-        indent_length_stack.push_back(buffer[i]);
-      }
     }
   }
 
@@ -147,7 +134,12 @@ struct Scanner {
   }
 
   bool scan(TSLexer *lexer, const bool *valid_symbols) {
-    if (valid_symbols[STRING_CONTENT] && !delimiter_stack.empty()) {
+    if (valid_symbols[SCAN_ERROR]) {
+      // printf("scan_error: %c (%x) %s\n", lexer->lookahead, lexer->lookahead, valid_symbols[STRING_END] ? "+end" : "-end");
+    }
+
+    if (valid_symbols[STRING_CONTENT] && !delimiter_stack.empty() && !valid_symbols[SCAN_ERROR]) {
+      // printf("sting_content: %c (%x) %s\n", lexer->lookahead, lexer->lookahead, valid_symbols[STRING_END] ? "+end" : "-end");
       Delimiter delimiter = delimiter_stack.back();
       int32_t end_character = delimiter.end_character();
       bool has_content = false;
@@ -211,7 +203,7 @@ struct Scanner {
             if (has_content) {
               lexer->result_symbol = STRING_CONTENT;
             } else {
-        //printf("string end\n");
+        // printf("string end\n");
               lexer->advance(lexer, false);
               delimiter_stack.pop_back();
               lexer->result_symbol = STRING_END;
@@ -225,9 +217,11 @@ struct Scanner {
         advance(lexer);
         has_content = true;
       }
+
+      return false;
     }
 
-    if (valid_symbols[FRONTMATTER]) {
+    if (valid_symbols[FRONTMATTER] && !valid_symbols[SCAN_ERROR]) {
         for (;;) {
             if (lexer->lookahead == '-') {
                 int minus_count = 0;
@@ -286,8 +280,24 @@ struct Scanner {
 
     lexer->mark_end(lexer);
 
+    // Skip whitespace (we're likely in error recovery, searching for a string start
+    for (;;) {
+      switch (lexer->lookahead) {
+        case '\n':
+        case ' ':
+        case '\r':
+        case '\t':
+          skip(lexer);
+          break;
+        default:
+          goto done;
+      }
+    }
+
+done:
+
     if (valid_symbols[STRING_START]) {
-      //printf("sting_start: %c (%x)\n", lexer->lookahead, lexer->lookahead);
+      // printf("sting_start: %c (%x)\n", lexer->lookahead, lexer->lookahead);
       Delimiter delimiter;
 
       if (lexer->lookahead == '`') {
@@ -321,7 +331,7 @@ struct Scanner {
       }
 
       if (delimiter.end_character()) {
-        //printf("string start\n");
+        // printf("string start\n");
         delimiter_stack.push_back(delimiter);
         lexer->result_symbol = STRING_START;
         return true;
@@ -331,7 +341,6 @@ struct Scanner {
     return false;
   }
 
-  vector<uint16_t> indent_length_stack;
   vector<Delimiter> delimiter_stack;
 };
 

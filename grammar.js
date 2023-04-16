@@ -73,6 +73,7 @@ module.exports = grammar({
     $._string_start,
     $._string_content,
     $._string_end,
+    $._scan_error,
   ],
 
   rules: {

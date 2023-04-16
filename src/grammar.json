@@ -4688,6 +4688,10 @@
     {
       "type": "SYMBOL",
       "name": "_string_end"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_scan_error"
     }
   ],
   "inline": [
